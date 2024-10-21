@@ -1,13 +1,11 @@
 --Questão 1
 SELECT 
-	ProductKey,
 	ProductName,
-	DimProduct.productSubcategoryKey,
+	DimProduct.ProductSubcategoryKey,
 	ProductSubcategoryName
-FROM 
-	DimProduct
+FROM DimProduct
 INNER JOIN DimProductSubcategory
-	ON DimProduct.ProductSubcategorykey = DimProductSubcategory.ProductSubcategoryKey
+	ON DimProduct.ProductSubcategoryKey = DimProductSubcategory.ProductSubcategoryKey
 
 --Questão 2
 SELECT
@@ -40,8 +38,8 @@ SELECT
 FROM DimProduct
 LEFT JOIN DimProductSubcategory
 	ON DimProduct.ProductSubcategoryKey = DimProductSubcategory.ProductSubcategoryKey
-LEFT JOIN DimProductCategory
-	ON DimProductSubcategory.ProductCategoryKey = DimProductCategory.ProductCategorykey
+	LEFT JOIN DimProductCategory
+		ON DimProductSubcategory.ProductCategoryKey = DimProductCategory.ProductCategorykey
 
 --Questão 5-a
 SELECT TOP(100) *
@@ -68,26 +66,23 @@ INNER JOIN DimScenario
 	ON factStrategyPlan.ScenarioKey = DimScenario.ScenarioKey
 
 --Questão 7
-SELECT *
-FROM DimProductSubcategory
-SELECT *
-FROM DimProduct
-
 SELECT 
 	ProductKey,
 	Productname,
-	ProductSubcategoryName
+	DimProductSubcategory.ProductSubcategoryName
 FROM DimProduct
-FULL JOIN DimProductSubcategory
+RIGHT JOIN DimProductSubcategory
 	ON DimProduct.Productsubcategorykey = DimProductSubcategory.ProductSubcategoryKey
+WHERE ProductName IS NULL
 
-	--
+	--Teste
 SELECT 
 	ProductSubcategoryName,
 	COUNT(ProductName)
 FROM DimProductSubcategory
-FULL JOIN DimProduct
+RIGHT JOIN DimProduct
 	ON DimProduct.Productsubcategorykey = DimProductSubcategory.ProductSubcategoryKey
+	WHERE ProductName IS NULL
 GROUP BY ProductSubcategoryName
 
 --Questão 8:
@@ -99,7 +94,7 @@ CROSS JOIN DimChannel
 WHERE BrandName IN('Contoso', 'Litware', 'Fabrikam')
 
 --Questão 9:
-SELECT
+SELECT TOP(1000)
 	OnlineSalesKey,
 	DateKey,
 	PromotionName,
@@ -107,7 +102,7 @@ SELECT
 FROM FactOnlineSales
 INNER JOIN DimPromotion
 	ON FactOnlineSales.PromotionKey = DimPromotion.PromotionKey
-WHERE DimPromotion.PromotionName != 'No Discount'
+WHERE PromotionName <> 'No Discount'
 ORDER BY DateKey ASC
 
 
@@ -125,4 +120,4 @@ INNER JOIN DimStore
 	ON FactSales.StoreKey = DimStore.StoreKey
 INNER JOIN DimProduct
 	ON FactSales.ProductKey = DimProduct.ProductKey
-	ORDER BY SalesAmount ASC
+	ORDER BY SalesAmount DESC
